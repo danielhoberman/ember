@@ -12,6 +12,11 @@ from ._core_operators import (
     _log,
     _exp,
     _inv,
+    _log_back,
+    _exp_back,
+    _relu_back,
+    _sigmoid_back,
+    _inv_back,
 )
 
 
@@ -80,5 +85,30 @@ def log(a: float) -> float:
 
 
 def exp(a: float) -> float:
-    """Exponential function e^a via C++ backend."""
+    """Compute e^a using the C++ backend."""
     return _exp(a)
+
+
+def log_back(a: float, grad: float) -> float:
+    """Backward pass for log: dL/da given upstream gradient."""
+    return _log_back(a, grad)
+
+
+def inv_back(a: float, grad: float) -> float:
+    """Backward pass for inverse: dL/da given upstream gradient."""
+    return _inv_back(a, grad)
+
+
+def relu_back(a: float, grad: float) -> float:
+    """Backward pass for ReLU: dL/da given upstream gradient."""
+    return _relu_back(a, grad)
+
+
+def sigmoid_back(a: float, grad: float) -> float:
+    """Backward pass for sigmoid: dL/da given upstream gradient."""
+    return _sigmoid_back(a, grad)
+
+
+def exp_back(a: float, grad: float) -> float:
+    """Backward pass for exp: dL/da given upstream gradient."""
+    return _exp_back(a, grad)

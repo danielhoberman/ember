@@ -35,4 +35,14 @@ PYBIND11_MODULE(_core_operators, m) {
     // =====================
     m.def("_exp", &_exp, "Exponential e^a");
     m.def("_log", &_log, "Natural logarithm ln(a)");
+
+    // =====================
+    // Backward
+    // =====================
+    m.def("_log_back", &_log_back, "Compute gradient of log(a)");
+    m.def("_inv_back", &_inv_back, "Comput egradient of inv(a)");
+    m.def("_relu_back", &_relu_back, "Compute gradient of relu(a)");
+    m.def("_sigmoid_back", &_sigmoid_back, "Comput egradient of sigmoid(a)");
+    m.def("_exp_back", &_exp_back, "Compute gradient of exp(a)");
+
 }

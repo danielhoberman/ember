@@ -49,3 +49,39 @@ inline float _exp(float a) { return std::exp(a); }
 
 // Compute the multiplicative inverse (1/a) of a
 inline float _inv(float a) { return 1.0f / a; }
+
+
+// =====================
+// Backward
+// =====================
+
+// Compute the gradient of log(a) w.r.t a for backpropagation.
+inline float _log_back(float a , float grad) {
+    return grad / a;
+}
+
+// Compute the gradient of 1/a w.r.t a for backpropagation.
+inline float _inv_back(float a, float grad) {
+    return -grad / (a * a);
+}
+
+// Compute the gradient of ReLU w.r.t a for backpropagation.
+inline float _relu_back(float a, float grad) {
+    return (a > 0) ? grad : 0.0f;
+}
+
+// Compute the gradient of the Sigmoid function for backpropagation.
+inline float _sigmoid_back(float a, float grad) {
+    float s = _sigmoid(a);
+    return grad * s * (1.0f - s);
+}
+
+// Backward gradient for exp(a).
+inline float _exp_back(float a, float grad) {
+    return grad * _exp(a);
+}
+
+
+
+
+
