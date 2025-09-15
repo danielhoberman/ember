@@ -2,7 +2,7 @@
 
 from typing import Callable, Generic, Iterable, Tuple, TypeVar
 
-import tinytorch.operators as operators
+import ember.operators as operators
 
 A = TypeVar("A")
 
