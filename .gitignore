@@ -1,0 +1,22 @@
+# CMake build artifacts
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Compiled shared objects (Python extensions)
+*.so
+*.pyd
+*.dll
+*.dylib
+
+# Python stuff
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
