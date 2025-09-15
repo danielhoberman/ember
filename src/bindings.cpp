@@ -1,13 +1,12 @@
 #include <pybind11/pybind11.h>
-#include "scalar.h"
+#include "operators.h"
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(myproject_cpp, m) {
-    py::class_<Scalar>(m, "Scalar")
-        .def(py::init<float, bool>(), py::arg("value"), py::arg("requires_grad") = false)
-        .def_readwrite("value", &Scalar::value)
-        .def_readwrite("grad", &Scalar::grad)
-        .def("backward", &Scalar::backward)
-        .def("__add__", &Scalar::operator+);
+PYBIND11_MODULE(_core, m) {
+    m.doc() = "Ember low-level numeric ops";
+
+    m.def("mul", &mul, "Multiply two floats");
+    m.def("add", &add, "Add two floats");
+    m.def("sub", &sub, "Subtract two floats");
 }

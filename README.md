@@ -44,7 +44,7 @@ brew install pybind11
 
 ---
 
-## 🔹 Build Instructions
+## 🔹 Build & Install with uv
 
 1. Clone this repo and enter it:
 
@@ -53,32 +53,28 @@ brew install pybind11
    cd myproject
    ```
 
-2. Create a build directory and configure with CMake:
+2. Sync dependencies (this sets up a virtual environment with `scikit-build-core` + `pybind11`):
 
    ```bash
-   cmake -B build -S . -DPYBIND11_PYTHON_VERSION=3.12
+   uv sync
    ```
 
-3. Compile:
+3. Build and install the C++ extension in editable mode:
 
    ```bash
-   cmake --build build
+   uv pip install -e .
    ```
 
-4. After building, you should see something like:
-
-   ```
-   build/myproject.cpython-312-darwin.so
-   ```
+   This will automatically configure and compile the project using CMake under the hood, then install the built Python extension into your environment.
 
 ---
 
 ## 🔹 Running the Python Demo
 
-Point `PYTHONPATH` to the `build/` folder so Python can find the module, then run the demo:
+Run the demo script inside the `uv` environment:
 
 ```bash
-PYTHONPATH=build python3 python/main.py
+uv run python python/main.py
 ```
 
 Example output:
@@ -86,6 +82,14 @@ Example output:
 ```
 Hello from Danny, value=5
 ```
+
+---
+
+👉 With this setup, you no longer need to manually set `PYTHONPATH` or touch the `build/` folder. Everything is handled by `uv` + `scikit-build-core`.
+
+---
+
+Do you also want me to add an **optional dev loop** section to the README (using `watchfiles` or `entr`) so users can auto-rebuild whenever they edit C++ files?
 
 ---
 
