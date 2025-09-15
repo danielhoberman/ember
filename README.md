@@ -1,108 +1,113 @@
-# MyProject — Minimal C++ ↔ Python Extension with pybind11
+# Ember
 
-This is a **minimal example** of building a C++ library and exposing it to Python using **pybind11** + **CMake**.
-It shows how to:
-
-- Write a C++ class (`MyClass`)
-- Bind it to Python with `pybind11`
-- Build it into a shared library (`.so` / `.pyd`)
-- Import it directly from Python
+**Ember** is a lightweight numerical computing library with a C++ backend for high-performance scalar operations. It exposes common arithmetic, comparison, activation, and exponential/logarithmic operations to Python via `pybind11`.
 
 ---
 
-## 🔹 Project Structure
+## 🔹 Features
 
-```
-myproject/
-├── CMakeLists.txt          # Build configuration
-├── include/
-│   └── myclass.h           # C++ class declaration
-├── src/
-│   ├── myclass.cpp         # C++ class implementation
-│   └── bindings.cpp        # pybind11 bindings
-├── python/
-│   └── demo.py             # Example Python usage
-└── build/                  # (created after compilation)
-```
+- Header-only C++ operators for:
+
+  - Arithmetic: `add`, `sub`, `mul`, `neg`, `inv`, `id`, `max`
+  - Comparisons: `lt`, `eq`, `is_close`
+  - Activations: `sigmoid`, `relu`
+  - Exponential/logarithmic: `exp`, `log`
+
+- Python bindings via `pybind11` and `uv` for easy import.
+- Type-safe wrappers for seamless Python use.
 
 ---
 
-## 🔹 Prerequisites
+## 🔹 Build Instructions
 
-Make sure you have:
-
-- Python ≥ 3.9
-- CMake ≥ 3.15
-- A C++17 compiler (clang++ / g++)
-- pybind11 (header-only library)
-
-You can install `pybind11` in your Python environment:
+1. **Clone the repository:**
 
 ```bash
-brew install pybind11
+git clone https://github.com/yourusername/ember.git
+cd ember
 ```
 
----
-
-## 🔹 Build & Install with uv
-
-1. Clone this repo and enter it:
-
-   ```bash
-   git clone https://github.com/yourusername/myproject.git
-   cd myproject
-   ```
-
-2. Sync dependencies (this sets up a virtual environment with `scikit-build-core` + `pybind11`):
-
-   ```bash
-   uv sync
-   ```
-
-3. Build and install the C++ extension in editable mode:
-
-   ```bash
-   uv pip install -e .
-   ```
-
-   This will automatically configure and compile the project using CMake under the hood, then install the built Python extension into your environment.
-
----
-
-## 🔹 Running the Python Demo
-
-Run the demo script inside the `uv` environment:
+2. **Build the C++ extension using uv:**
 
 ```bash
-uv run python python/main.py
+uv build
+```
+
+- This will create a `_core` module inside `dist/` that Python can import.
+
+---
+
+## 🔹 Install in editable mode
+
+```bash
+uv pip install -e .
+```
+
+- Now Python will recognize the `ember` package for development.
+
+---
+
+## 🔹 Running the Demo
+
+```bash
+uv run python ember/main.py
 ```
 
 Example output:
 
 ```
-Hello from Danny, value=5
+=== Basic arithmetic ===
+3.0 + 4.0 = 7.0
+3.0 * 4.0 = 12.0
+3.0 - 4.0 = -1.0
+-3.0 = -3.0
+1/3.0 = 0.33333334
+
+=== Comparisons ===
+3.0 < 4.0 ? 1.0
+3.0 == 4.0 ? 0.0
+max(3.0, 4.0) = 4.0
+is_close(3.0, 4.0) = 0.0
+
+=== Non-linear activations ===
+sigmoid(3.0) = 0.95257413
+ReLU(-3.0) = 0.0
+
+=== Exponentials / logs ===
+exp(3.0) = 20.085537
+log(4.0) = 1.3862944
 ```
 
 ---
 
-👉 With this setup, you no longer need to manually set `PYTHONPATH` or touch the `build/` folder. Everything is handled by `uv` + `scikit-build-core`.
+## 🔹 Usage Example
+
+```python
+import ember
+
+a = 3.0
+b = 4.0
+
+print(ember.add_op(a, b))       # 7.0
+print(ember.mul_op(a, b))       # 12.0
+print(ember.sigmoid_op(a))      # 0.95257413
+print(ember.log_op(b))          # 1.3862944
+```
 
 ---
 
-Do you also want me to add an **optional dev loop** section to the README (using `watchfiles` or `entr`) so users can auto-rebuild whenever they edit C++ files?
+## 🔹 Development
+
+- Use `uv` to manage builds and package installation.
+- Use `pre-commit` with `ruff` and `mypy` for linting and type checking:
+
+```bash
+uv run pre-commit install
+uv run pre-commit run --all-files
+```
 
 ---
 
-## 🔹 Notes
+## 🔹 License
 
-- The module name is set in `bindings.cpp`:
-
-  ```cpp
-  PYBIND11_MODULE(myproject, m) {
-      // ...
-  }
-  ```
-
-  This defines the Python import name (`import myproject`).
-
-- On Windows, the output file will be a `.pyd` instead of `.so`.
+MIT License – see `LICENSE` file
