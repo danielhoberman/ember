@@ -5,6 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(pybind11 REQUIRED)
 
-pybind11_add_module(myproject_cpp src/bindings.cpp src/myclass.cpp)
+pybind11_add_module(myproject_cpp src/bindings.cpp src/scalar.cpp)
 
 target_include_directories(myproject_cpp PRIVATE include)

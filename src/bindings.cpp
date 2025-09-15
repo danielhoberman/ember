@@ -1,12 +1,13 @@
 #include <pybind11/pybind11.h>
-#include "myclass.h"
+#include "scalar.h"
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(myproject, m) {
-    py::class_<MyClass>(m, "MyClass")
-        .def(py::init<std::string, int>())
-        .def("greet", &MyClass::greet)
-        .def("set_value", &MyClass::set_value)
-        .def("get_value", &MyClass::get_value);
+PYBIND11_MODULE(myproject_cpp, m) {
+    py::class_<Scalar>(m, "Scalar")
+        .def(py::init<float, bool>(), py::arg("value"), py::arg("requires_grad") = false)
+        .def_readwrite("value", &Scalar::value)
+        .def_readwrite("grad", &Scalar::grad)
+        .def("backward", &Scalar::backward)
+        .def("__add__", &Scalar::operator+);
 }

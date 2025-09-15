@@ -1,3 +1,6 @@
-from . import myproject_cpp
+# python/myproject_cpp/__init__.py
 
-MyClass = myproject_cpp.MyClass
+from . import myproject_cpp  # import the compiled pybind11 module
+
+# Expose classes/functions at the top level
+Scalar = myproject_cpp.Scalar

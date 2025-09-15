@@ -78,7 +78,7 @@ brew install pybind11
 Point `PYTHONPATH` to the `build/` folder so Python can find the module, then run the demo:
 
 ```bash
-PYTHONPATH=build python3 python/demo.py
+PYTHONPATH=build python3 python/main.py
 ```
 
 Example output:
