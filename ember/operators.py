@@ -1,84 +1,84 @@
-from ._core import (
-    mul,
-    id,
-    add,
-    neg,
-    lt,
-    eq,
-    max,
-    is_close,
-    sigmoid,
-    relu,
-    log,
-    exp,
-    inv,
+from ._core_operators import (
+    _mul,
+    _id,
+    _add,
+    _neg,
+    _lt,
+    _eq,
+    _max,
+    _is_close,
+    _sigmoid,
+    _relu,
+    _log,
+    _exp,
+    _inv,
 )
 
 
 # Arithmetic operators
-def mul_op(a: float, b: float) -> float:
+def mul(a: float, b: float) -> float:
     """Multiply two numbers via C++ backend."""
-    return mul(a, b)
+    return _mul(a, b)
 
 
-def id_op(a: float) -> float:
+def id(a: float) -> float:
     """Identity function."""
-    return id(a)
+    return _id(a)
 
 
-def add_op(a: float, b: float) -> float:
+def add(a: float, b: float) -> float:
     """Add two numbers via C++ backend."""
-    return add(a, b)
+    return _add(a, b)
 
 
-def neg_op(a: float) -> float:
+def neg(a: float) -> float:
     """Negate a number via C++ backend."""
-    return neg(a)
+    return _neg(a)
 
 
-def inv_op(a: float) -> float:
+def inv(a: float) -> float:
     """Multiplicative inverse (1/a) via C++ backend."""
-    return inv(a)
+    return _inv(a)
 
 
 # Comparison operators
-def lt_op(a: float, b: float) -> float:
+def lt(a: float, b: float) -> float:
     """Return 1.0 if a < b, else 0.0"""
-    return lt(a, b)
+    return _lt(a, b)
 
 
-def eq_op(a: float, b: float) -> float:
+def eq(a: float, b: float) -> float:
     """Return 1.0 if a == b, else 0.0"""
-    return eq(a, b)
+    return _eq(a, b)
 
 
-def max_op(a: float, b: float) -> float:
+def max(a: float, b: float) -> float:
     """Return the maximum of a and b."""
-    return max(a, b)
+    return _max(a, b)
 
 
-def is_close_op(a: float, b: float, tol: float = 1e-2) -> float:
+def is_close(a: float, b: float, tol: float = 1e-2) -> float:
     """Return 1.0 if a and b are within tolerance tol, else 0.0"""
-    return is_close(a, b, tol)
+    return _is_close(a, b, tol)
 
 
 # Non-linear activations
-def sigmoid_op(a: float) -> float:
+def sigmoid(a: float) -> float:
     """Sigmoid activation function via C++ backend."""
-    return sigmoid(a)
+    return _sigmoid(a)
 
 
-def relu_op(a: float) -> float:
+def relu(a: float) -> float:
     """ReLU activation function via C++ backend."""
-    return relu(a)
+    return _relu(a)
 
 
 # Exponentials / logarithms
-def log_op(a: float) -> float:
+def log(a: float) -> float:
     """Natural logarithm via C++ backend."""
-    return log(a)
+    return _log(a)
 
 
-def exp_op(a: float) -> float:
+def exp(a: float) -> float:
     """Exponential function e^a via C++ backend."""
-    return exp(a)
+    return _exp(a)

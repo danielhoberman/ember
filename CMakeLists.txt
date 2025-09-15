@@ -8,13 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Find pybind11
 find_package(pybind11 CONFIG REQUIRED)
 
-# Build the pybind11 extension _core
-pybind11_add_module(_core
-    src/bindings.cpp   # only this file, operators.h is included header-only
+# Build the pybind11 extension _core_operators
+pybind11_add_module(_core_operators
+    src/operators_bindings.cpp   # only this file, operators.h is included header-only
 )
 
 # Include the folder containing operators.h
-target_include_directories(_core PRIVATE include)
+target_include_directories(_core_operators PRIVATE include)
 
 # Install the compiled module into the ember package
-install(TARGETS _core DESTINATION ember)
+install(TARGETS _core_operators DESTINATION ember)
