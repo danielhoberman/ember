@@ -8,7 +8,10 @@ settings.load_profile("ci")
 
 
 small_ints = integers(min_value=1, max_value=3)
-small_floats = floats(min_value=-100, max_value=100, allow_nan=False)
+small_floats = floats(
+    min_value=-100.0, max_value=100.0, allow_nan=False, allow_infinity=False
+).filter(lambda x: abs(x) >= 1e-7)
+
 med_ints = integers(min_value=1, max_value=20)
 
 

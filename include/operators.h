@@ -1,87 +1,70 @@
 #pragma once
 #include <cmath>
+#include <algorithm>
+#include <stdexcept>
 
-// =====================
-// Header-only operators
-// =====================
+namespace fwd {
 
-// Multiply two floats
-inline float _mul(float a, float b) { return a * b; }
+// Basic math
+inline float mul(float a, float b) { return a * b; }
+inline float add(float a, float b) { return a + b; }
+inline float neg(float a) { return -a; }
+inline float id(float a) { return a; }
+inline float max(float a, float b) { return std::max(a, b); }
 
-// Identity function (returns input unchanged)
-inline float _id(float a) { return a; }
-
-// Addition
-inline float _add(float a, float b) { return a + b; }
-
-// Negation (unary minus)
-inline float _neg(float a) { return -a; }
-
-// Less-than comparison: returns 1.0f if a < b, else 0.0f
-inline float _lt(float a, float b) { return (a < b) ? 1.0f : 0.0f; }
-
-// Equality comparison: returns 1.0f if a == b, else 0.0f
-inline float _eq(float a, float b) { return (a == b) ? 1.0f : 0.0f; }
-
-// Maximum of two floats
-inline float _max(float a, float b) { return (a > b) ? a : b; }
-
-// Check if two floats are close within a tolerance: returns 1.0f if close, else 0.0f
-inline float _is_close(float a, float b, float tol = 1e-2f) {
-    return (std::fabs(a - b) < tol);
+// Comparisons (numeric style: return 0.0f / 1.0f)
+inline float lt(float a, float b) { return (a < b) ? 1.0f : 0.0f; }
+inline float eq(float a, float b) { return (a == b) ? 1.0f : 0.0f; }
+inline float is_close(float a, float b, float tol = 1e-2f) {
+    return (std::fabs(a - b) < tol) ? 1.0f : 0.0f;
 }
 
-// Compute the sigmoid function in a numerically stable way
-inline float _sigmoid(float a) {
-    return 1.0f / (1.0f + std::exp(-a));
+// Activations
+inline float relu(float a) { return (a > 0.0f) ? a : 0.0f; }
+
+// Exponentials and logs
+inline float exp(float a) { return std::exp(a); }
+
+inline float log(float a) {
+    if (a <= 0.0f) throw std::domain_error("log: input must be > 0");
+    return std::log(a);
 }
 
-// Compute the ReLU function: max(0, a)
-inline float _relu(float a) {
-    return (a > 0) ? a : 0.0f;
+inline float inv(float a) {
+    if (a == 0.0f) throw std::domain_error("inv: division by zero");
+    return 1.0f / a;
 }
 
-// Compute the natural logarithm of a
-inline float _log(float a) { return std::log(a); }
-
-// Compute the exponential of a (e^a)
-inline float _exp(float a) { return std::exp(a); }
-
-// Compute the multiplicative inverse (1/a) of a
-inline float _inv(float a) { return 1.0f / a; }
-
-
-// =====================
-// Backward
-// =====================
-
-// Compute the gradient of log(a) w.r.t a for backpropagation.
-inline float _log_back(float a , float grad) {
-    return grad / a;
+// Numerically stable sigmoid
+inline float sigmoid(float a) {
+    if (a >= 0.0f) {
+        float z = std::exp(-a);
+        return 1.0f / (1.0f + z);
+    } else {
+        float z = std::exp(a);
+        return z / (1.0f + z);
+    }
 }
 
-// Compute the gradient of 1/a w.r.t a for backpropagation.
-inline float _inv_back(float a, float grad) {
-    return -grad / (a * a);
+} // namespace fwd
+
+
+namespace bwd {
+
+// Backward ops
+inline float log(float a, float grad) { return grad / a; }
+inline float inv(float a, float grad) { return -grad / (a * a); }
+
+inline float relu(float a, float grad) {
+    return (a > 0.0f) ? grad : 0.0f;
 }
 
-// Compute the gradient of ReLU w.r.t a for backpropagation.
-inline float _relu_back(float a, float grad) {
-    return (a > 0) ? grad : 0.0f;
-}
 
-// Compute the gradient of the Sigmoid function for backpropagation.
-inline float _sigmoid_back(float a, float grad) {
-    float s = _sigmoid(a);
+inline float sigmoid(float a, float grad) {
+    float s = fwd::sigmoid(a);
     return grad * s * (1.0f - s);
 }
 
-// Backward gradient for exp(a).
-inline float _exp_back(float a, float grad) {
-    return grad * _exp(a);
-}
+inline float exp(float a, float grad) { return grad * fwd::exp(a); }
 
-
-
-
-
+} // namespace bwd

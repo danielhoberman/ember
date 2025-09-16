@@ -1,114 +1,118 @@
-from ._core_operators import (
-    _mul,
-    _id,
-    _add,
-    _neg,
-    _lt,
-    _eq,
-    _max,
-    _is_close,
-    _sigmoid,
-    _relu,
-    _log,
-    _exp,
-    _inv,
-    _log_back,
-    _exp_back,
-    _relu_back,
-    _sigmoid_back,
-    _inv_back,
-)
+# ember/operators.py
+"""
+High-level Python wrappers for the C++ core operators.
+
+These functions provide user-friendly interfaces with consistent
+naming, docstrings, and typing. All operators are delegated to
+the compiled C++ backend.
+"""
+
+from typing import Union
+from . import _core_operators as _C
+
+Number = Union[int, float]
 
 
+# =====================
 # Arithmetic operators
-def mul(a: float, b: float) -> float:
+# =====================
+def mul(a: Number, b: Number) -> float:
     """Multiply two numbers via C++ backend."""
-    return _mul(a, b)
+    return _C._mul(float(a), float(b))
 
 
-def id(a: float) -> float:
-    """Identity function."""
-    return _id(a)
-
-
-def add(a: float, b: float) -> float:
+def add(a: Number, b: Number) -> float:
     """Add two numbers via C++ backend."""
-    return _add(a, b)
+    return _C._add(float(a), float(b))
 
 
-def neg(a: float) -> float:
+def neg(a: Number) -> float:
     """Negate a number via C++ backend."""
-    return _neg(a)
+    return _C._neg(float(a))
 
 
-def inv(a: float) -> float:
+def inv(a: Number) -> float:
     """Multiplicative inverse (1/a) via C++ backend."""
-    return _inv(a)
+    return _C._inv(float(a))
 
 
+def id(a: Number) -> float:
+    """Identity function (returns input unchanged)."""
+    return _C._id(float(a))
+
+
+# =====================
 # Comparison operators
-def lt(a: float, b: float) -> float:
-    """Return 1.0 if a < b, else 0.0"""
-    return _lt(a, b)
+# =====================
+def lt(a: Number, b: Number) -> float:
+    """Return 1.0 if a < b, else 0.0."""
+    return _C._lt(float(a), float(b))
 
 
-def eq(a: float, b: float) -> float:
-    """Return 1.0 if a == b, else 0.0"""
-    return _eq(a, b)
+def eq(a: Number, b: Number) -> float:
+    """Return 1.0 if a == b, else 0.0."""
+    return _C._eq(float(a), float(b))
 
 
-def max(a: float, b: float) -> float:
-    """Return the maximum of a and b."""
-    return _max(a, b)
+def max(a: Number, b: Number) -> float:
+    """Return the maximum of a and b via C++ backend."""
+    return _C._max(float(a), float(b))
 
 
-def is_close(a: float, b: float, tol: float = 1e-2) -> float:
-    """Return 1.0 if a and b are within tolerance tol, else 0.0"""
-    return _is_close(a, b, tol)
+def is_close(a: Number, b: Number, tol: float = 1e-2) -> float:
+    """Return 1.0 if |a - b| < tol, else 0.0."""
+    return _C._is_close(float(a), float(b), float(tol))
 
 
+# =====================
 # Non-linear activations
-def sigmoid(a: float) -> float:
+# =====================
+def sigmoid(a: Number) -> float:
     """Sigmoid activation function via C++ backend."""
-    return _sigmoid(a)
+    return _C._sigmoid(float(a))
 
 
-def relu(a: float) -> float:
+def relu(a: Number) -> float:
     """ReLU activation function via C++ backend."""
-    return _relu(a)
+    return _C._relu(float(a))
 
 
+# =====================
 # Exponentials / logarithms
-def log(a: float) -> float:
+# =====================
+def log(a: Number) -> float:
     """Natural logarithm via C++ backend."""
-    return _log(a)
+    return _C._log(float(a))
 
 
-def exp(a: float) -> float:
-    """Compute e^a using the C++ backend."""
-    return _exp(a)
+def exp(a: Number) -> float:
+    """Exponential function e^a via C++ backend."""
+    return _C._exp(float(a))
 
 
-def log_back(a: float, grad: float) -> float:
+# =====================
+# Backward passes
+# =====================
+def log_back(a: Number, grad: Number) -> float:
     """Backward pass for log: dL/da given upstream gradient."""
-    return _log_back(a, grad)
+    return _C._log_back(float(a), float(grad))
 
 
-def inv_back(a: float, grad: float) -> float:
+def inv_back(a: Number, grad: Number) -> float:
     """Backward pass for inverse: dL/da given upstream gradient."""
-    return _inv_back(a, grad)
+    return _C._inv_back(float(a), float(grad))
 
 
-def relu_back(a: float, grad: float) -> float:
+def relu_back(a: Number, grad: Number) -> float:
     """Backward pass for ReLU: dL/da given upstream gradient."""
-    return _relu_back(a, grad)
+    return _C._relu_back(float(a), float(grad))
 
 
-def sigmoid_back(a: float, grad: float) -> float:
+def sigmoid_back(a: Number, grad: Number) -> float:
     """Backward pass for sigmoid: dL/da given upstream gradient."""
-    return _sigmoid_back(a, grad)
+    return _C._sigmoid_back(float(a), float(grad))
 
 
-def exp_back(a: float, grad: float) -> float:
+def exp_back(a: Number, grad: Number) -> float:
     """Backward pass for exp: dL/da given upstream gradient."""
-    return _exp_back(a, grad)
+    return _C._exp_back(float(a), float(grad))

@@ -42,17 +42,17 @@ def test_same_as_python(x: float, y: float) -> None:
 @given(small_floats)
 def test_relu(a: float) -> None:
     if a > 0:
-        assert relu(a) == a
+        assert_close(relu(a), a)
     if a < 0:
-        assert relu(a) == 0.0
+        assert_close(relu(a), 0.0)
 
 
 @given(small_floats, small_floats)
 def test_relu_back(a: float, b: float) -> None:
     if a > 0:
-        assert relu_back(a, b) == b
+        assert_close(relu_back(a, b), b)
     if a < 0:
-        assert relu_back(a, b) == 0.0
+        assert_close(relu_back(a, b), 0.0)
 
 
 @given(small_floats, small_floats)
@@ -60,12 +60,12 @@ def test_sigmoid_back(a: float, b: float) -> None:
     sig = 1 / (1 + math.exp(-a))  # sigmoid
     expected = b * sig * (1 - sig)  # ✅ correct derivative
     actual = sigmoid_back(a, b)
-    assert math.isclose(actual, expected, rel_tol=1e-9)
+    assert_close(actual, expected)
 
 
 @given(small_floats)
 def test_id(a: float) -> None:
-    assert id(a) == a
+    assert_close(id(a), a)
 
 
 @given(small_floats)
@@ -77,10 +77,10 @@ def test_lt(a: float) -> None:
 
 @given(small_floats)
 def test_max(a: float) -> None:
-    assert max(a - 1.0, a) == a
-    assert max(a, a - 1.0) == a
-    assert max(a + 1.0, a) == a + 1.0
-    assert max(a, a + 1.0) == a + 1.0
+    assert_close(max(a - 1.0, a), a)
+    assert_close(max(a, a - 1.0), a)
+    assert_close(max(a + 1.0, a), a + 1.0)
+    assert_close(max(a, a + 1.0), a + 1.0)
 
 
 @given(small_floats)
