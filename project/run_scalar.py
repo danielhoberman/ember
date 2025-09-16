@@ -1,5 +1,3 @@
-import random
-
 import ember
 
 
@@ -7,51 +5,14 @@ class Network(ember.nn.Module):
     def __init__(self, hidden_layers):
         super().__init__()
         input_size = 2
-        self.layer1 = Linear(input_size, hidden_layers)
-        self.layer2 = Linear(hidden_layers, hidden_layers)
-        self.layer3 = Linear(hidden_layers, 1)  # final output
+        self.layer1 = ember.nn.Linear(input_size, hidden_layers)
+        self.layer2 = ember.nn.Linear(hidden_layers, hidden_layers)
+        self.layer3 = ember.nn.Linear(hidden_layers, 1)  # final output
 
     def forward(self, x):
         middle = [h.relu() for h in self.layer1.forward(x)]
         end = [h.relu() for h in self.layer2.forward(middle)]
         return self.layer3.forward(end)[0].sigmoid()
-
-
-class Linear(ember.nn.Module):
-    def __init__(self, in_size, out_size):
-        super().__init__()
-        self.weights = []
-        self.bias = []
-        for i in range(in_size):
-            self.weights.append([])
-            for j in range(out_size):
-                self.weights[i].append(
-                    self.add_parameter(
-                        f"weight_{i}_{j}", ember.Scalar(2 * (random.random() - 0.5))
-                    )
-                )
-        for j in range(out_size):
-            self.bias.append(
-                self.add_parameter(
-                    f"bias_{j}", ember.Scalar(2 * (random.random() - 0.5))
-                )
-            )
-
-    def forward(self, inputs):
-        """
-        Forward pass for a linear layer.
-
-        Args:
-            inputs: List of tinytorch.Scalar values of length in_size
-
-        Returns:
-            List of tinytorch.Scalar values of length out_size
-        """
-        y = [b.value for b in self.bias]
-        for i, x in enumerate(inputs):
-            for j in range(len(y)):
-                y[j] = y[j] + x * self.weights[i][j].value
-        return y
 
 
 def default_log_fn(epoch, total_loss, correct, losses):
@@ -64,6 +25,7 @@ class ScalarTrain:
         self.model = Network(self.hidden_layers)
 
     def run_one(self, x):
+        # Wrap inputs in ember.Scalar and forward through the network
         return self.model.forward(
             (ember.Scalar(x[0], name="x_1"), ember.Scalar(x[1], name="x_2"))
         )
@@ -80,8 +42,6 @@ class ScalarTrain:
             correct = 0
             optim.zero_grad()
 
-            # Forward
-            loss = 0
             for i in range(data.N):
                 x_1, x_2 = data.X[i]
                 y = data.y[i]
@@ -100,13 +60,28 @@ class ScalarTrain:
                 total_loss += loss.data
 
             losses.append(total_loss)
-
-            # Update
             optim.step()
 
-            # Logging
             if epoch % 10 == 0 or epoch == max_epochs:
                 log_fn(epoch, total_loss, correct, losses)
+
+        return losses
+
+    def predict(self, X):
+        """
+        Predict output probabilities for a list of inputs.
+
+        Args:
+            X: List of tuples [(x1, x2), ...]
+
+        Returns:
+            List of floats (predicted probabilities)
+        """
+        preds = []
+        for x in X:
+            out = self.run_one(x)
+            preds.append(out.data)
+        return preds
 
 
 if __name__ == "__main__":
@@ -114,5 +89,22 @@ if __name__ == "__main__":
     HIDDEN = 10
     RATE = 0.5
 
+    # Load XOR dataset
     data = ember.datasets["Xor"](PTS)
-    ScalarTrain(HIDDEN).train(data, RATE)
+    trainer = ScalarTrain(HIDDEN)
+    trainer.train(data, RATE)
+
+    # Testing / Predictions
+    test_points = [(0, 0), (0, 1), (1, 0), (1, 1)]
+    test_labels = [0, 1, 1, 0]  # XOR ground truth
+
+    predictions = trainer.predict(test_points)
+
+    print("\nPredictions vs Actual:")
+    for pt, pred, label in zip(test_points, predictions, test_labels):
+        pred_label = round(pred)
+        correct = "✅" if pred_label == label else "❌"
+        print(
+            f"Input: {pt}, Predicted probability: {pred:.4f}, "
+            f"Predicted: {pred_label}, Actual: {label} {correct}"
+        )
