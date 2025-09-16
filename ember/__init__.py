@@ -1,3 +1,4 @@
+from .module import *  # noqa: F401,F403
 from .autodiff import *  # noqa: F401,F403
 
 from .scalar import Scalar, ScalarHistory, derivative_check  # noqa: F401,F403
