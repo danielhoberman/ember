@@ -3,7 +3,7 @@ import random
 import ember
 
 
-class Network(ember.Module):
+class Network(ember.nn.Module):
     def __init__(self, hidden_layers):
         super().__init__()
         input_size = 2
@@ -17,7 +17,7 @@ class Network(ember.Module):
         return self.layer3.forward(end)[0].sigmoid()
 
 
-class Linear(ember.Module):
+class Linear(ember.nn.Module):
     def __init__(self, in_size, out_size):
         super().__init__()
         self.weights = []
@@ -72,7 +72,7 @@ class ScalarTrain:
         self.learning_rate = learning_rate
         self.max_epochs = max_epochs
         self.model = Network(self.hidden_layers)
-        optim = ember.SGD(self.model.parameters(), learning_rate)
+        optim = ember.optim.SGD(self.model.parameters(), learning_rate)
 
         losses = []
         for epoch in range(1, self.max_epochs + 1):

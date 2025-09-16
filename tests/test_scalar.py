@@ -8,10 +8,11 @@ import ember
 from ember import (
     MathTestVariable,
     Scalar,
-    central_difference,
     derivative_check,
     operators,
 )
+
+from ember.autodiff import central_difference
 
 
 from .strategies import assert_close, small_floats

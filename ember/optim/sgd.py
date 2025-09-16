@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from ember.module import Parameter
+from ember.nn.module import Parameter
 from ember.scalar import Scalar
 
 

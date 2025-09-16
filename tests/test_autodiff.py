@@ -1,7 +1,8 @@
 from typing import Tuple
 
 import ember
-from ember import Context, ScalarFunction, ScalarHistory
+from ember.autodiff import Context
+from ember import ScalarFunction, ScalarHistory
 
 # Simple sanity check and debugging tests.
 

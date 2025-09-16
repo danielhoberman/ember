@@ -1,20 +1,25 @@
 # Ember
 
-**Ember** is a lightweight numerical computing library with a C++ backend for high-performance scalar operations. It exposes common arithmetic, comparison, activation, and exponential/logarithmic operations to Python via `pybind11`.
+**Ember** is a lightweight numerical computing library with a C++ backend for high-performance scalar operations. It exposes common arithmetic, comparison, activation, and exponential/logarithmic operations to Python via `pybind11`. Ember now also includes Python modules, automatic differentiation, and optimization utilities for building and training neural networks.
 
 ---
 
 ## 🔹 Features
 
-- Header-only C++ operators for:
+### **C++ Core Operators**
 
-  - Arithmetic: `add`, `sub`, `mul`, `neg`, `inv`, `id`, `max`
-  - Comparisons: `lt`, `eq`, `is_close`
-  - Activations: `sigmoid`, `relu`
-  - Exponential/logarithmic: `exp`, `log`
+- Arithmetic: `add`, `sub`, `mul`, `neg`, `inv`, `id`, `max`
+- Comparisons: `lt`, `eq`, `is_close`
+- Activations: `sigmoid`, `relu`
+- Exponential / logarithmic: `exp`, `log`
 
-- Python bindings via `pybind11` and `uv` for easy import.
-- Type-safe wrappers for seamless Python use.
+### **Python Additions**
+
+- **Modules**: Define custom layers and networks by subclassing `ember.Module`.
+- **Scalar**: Lightweight scalar type with gradient tracking for automatic differentiation.
+- **Autodiff**: Compute derivatives of arbitrary computation graphs using `.backward()`.
+- **SGD Optimizer**: Stochastic Gradient Descent to train models with gradient updates.
+- **Linear Layers**: Fully connected layers with learnable weights and biases.
 
 ---
 
@@ -27,7 +32,7 @@ git clone https://github.com/yourusername/ember.git
 cd ember
 ```
 
-2. **Build the C++ extension using uv:**
+2. **Build the C++ extension using `uv`:**
 
 ```bash
 uv build
@@ -37,61 +42,35 @@ uv build
 
 ---
 
-## 🔹 Install in editable mode
+## 🔹 Install in Editable Mode
 
 ```bash
 uv pip install -e .
 ```
 
-- Now Python will recognize the `ember` package for development.
+- Python will recognize the `ember` package for development.
 
 ---
 
-## 🔹 Running the Demo
-
-```bash
-uv run python ember/main.py
-```
-
-Example output:
-
-```
-=== Basic arithmetic ===
-3.0 + 4.0 = 7.0
-3.0 * 4.0 = 12.0
-3.0 - 4.0 = -1.0
--3.0 = -3.0
-1/3.0 = 0.33333334
-
-=== Comparisons ===
-3.0 < 4.0 ? 1.0
-3.0 == 4.0 ? 0.0
-max(3.0, 4.0) = 4.0
-is_close(3.0, 4.0) = 0.0
-
-=== Non-linear activations ===
-sigmoid(3.0) = 0.95257413
-ReLU(-3.0) = 0.0
-
-=== Exponentials / logs ===
-exp(3.0) = 20.085537
-log(4.0) = 1.3862944
-```
-
----
-
-## 🔹 Usage Example
+## 🔹 Python Usage Example
 
 ```python
 import ember
 
+# Scalar operations
 a = 3.0
 b = 4.0
-
 print(ember.add_op(a, b))       # 7.0
 print(ember.mul_op(a, b))       # 12.0
 print(ember.sigmoid_op(a))      # 0.95257413
 print(ember.log_op(b))          # 1.3862944
+
+# Neural network example
+from ember import ScalarTrain
+
+trainer = ScalarTrain(hidden_layers=10)
+data = ember.datasets
+trainer.train(data, learning_rate=0.5)
 ```
 
 ---

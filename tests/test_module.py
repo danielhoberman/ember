@@ -15,31 +15,31 @@ from .strategies import med_ints, small_floats
 # and checks that its properties work.
 
 
-class ModuleA1(ember.Module):
+class ModuleA1(ember.nn.Module):
     def __init__(self) -> None:
         super().__init__()
-        self.p1 = ember.Parameter(5)
+        self.p1 = ember.nn.Parameter(5)
         self.non_param = 10
         self.a = ModuleA2()
         self.b = ModuleA3()
 
 
-class ModuleA2(ember.Module):
+class ModuleA2(ember.nn.Module):
     def __init__(self) -> None:
         super().__init__()
-        self.p2 = ember.Parameter(10)
+        self.p2 = ember.nn.Parameter(10)
 
 
-class ModuleA3(ember.Module):
+class ModuleA3(ember.nn.Module):
     def __init__(self) -> None:
         super().__init__()
         self.c = ModuleA4()
 
 
-class ModuleA4(ember.Module):
+class ModuleA4(ember.nn.Module):
     def __init__(self) -> None:
         super().__init__()
-        self.p3 = ember.Parameter(15)
+        self.p3 = ember.nn.Parameter(15)
 
 
 def test_stacked_demo() -> None:
@@ -66,29 +66,29 @@ VAL_A = 50.0
 VAL_B = 100.0
 
 
-class Module1(ember.Module):
+class Module1(ember.nn.Module):
     def __init__(self, size_a: int, size_b: int, val: float) -> None:
         super().__init__()
         self.module_a = Module2(size_a)
         self.module_b = Module2(size_b)
-        self.parameter_a = ember.Parameter(val)
+        self.parameter_a = ember.nn.Parameter(val)
 
 
-class Module2(ember.Module):
+class Module2(ember.nn.Module):
     def __init__(self, extra: int = 0) -> None:
         super().__init__()
-        self.parameter_a = ember.Parameter(VAL_A)
-        self.parameter_b = ember.Parameter(VAL_B)
+        self.parameter_a = ember.nn.Parameter(VAL_A)
+        self.parameter_b = ember.nn.Parameter(VAL_B)
         self.non_parameter = 10
         self.module_c = Module3()
         for i in range(extra):
             self.add_parameter(f"extra_parameter_{i}", 0)
 
 
-class Module3(ember.Module):
+class Module3(ember.nn.Module):
     def __init__(self) -> None:
         super().__init__()
-        self.parameter_a = ember.Parameter(VAL_A)
+        self.parameter_a = ember.nn.Parameter(VAL_A)
 
 
 @given(med_ints, med_ints)
@@ -139,14 +139,14 @@ def test_stacked_module(size_a: int, size_b: int, val: float) -> None:
 # Check that the module runs forward correctly.
 
 
-class ModuleRun(ember.Module):
+class ModuleRun(ember.nn.Module):
     def forward(self) -> int:
         return 10
 
 
 @pytest.mark.xfail
 def test_module_fail_forward() -> None:
-    mod = ember.Module()
+    mod = ember.nn.Module()
     mod()
 
 
@@ -171,7 +171,7 @@ class MockParam:
 
 def test_parameter() -> None:
     t = MockParam()
-    q = ember.Parameter(t)
+    q = ember.nn.Parameter(t)
     print(q)
     assert t.x
     t2 = MockParam()
