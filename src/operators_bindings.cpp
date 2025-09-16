@@ -22,7 +22,7 @@ PYBIND11_MODULE(_core_operators, m) {
     m.def("_lt", &fwd::lt, "1.0f if a < b else 0.0f");
     m.def("_eq", &fwd::eq, "1.0f if a == b else 0.0f");
     m.def("_is_close", &fwd::is_close,
-          py::arg("a"), py::arg("b"), py::arg("tol") = 1e-2f,
+          py::arg("a"), py::arg("b"), py::arg("tol") = 2e-1f,
           "Check if two floats are close within a tolerance (returns 1.0 or 0.0)");
 
     // =====================

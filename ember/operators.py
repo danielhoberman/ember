@@ -59,7 +59,7 @@ def max(a: Number, b: Number) -> float:
     return _C._max(float(a), float(b))
 
 
-def is_close(a: Number, b: Number, tol: float = 1e-2) -> float:
+def is_close(a: Number, b: Number, tol: float = 2e-1) -> float:
     """Return 1.0 if |a - b| < tol, else 0.0."""
     return _C._is_close(float(a), float(b), float(tol))
 

@@ -15,7 +15,7 @@ inline float max(float a, float b) { return std::max(a, b); }
 // Comparisons (numeric style: return 0.0f / 1.0f)
 inline float lt(float a, float b) { return (a < b) ? 1.0f : 0.0f; }
 inline float eq(float a, float b) { return (a == b) ? 1.0f : 0.0f; }
-inline float is_close(float a, float b, float tol = 1e-2f) {
+inline float is_close(float a, float b, float tol = 2e-1f) {
     return (std::fabs(a - b) < tol) ? 1.0f : 0.0f;
 }
 

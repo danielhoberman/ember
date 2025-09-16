@@ -4,11 +4,10 @@ from typing import Any, Iterable, Tuple
 
 from typing_extensions import Protocol
 
-# ## Task 1.1
 # Central Difference calculation
 
 
-def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) -> Any:
+def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-3) -> Any:
     r"""
     Computes an approximation to the derivative of `f` with respect to one arg.
 
