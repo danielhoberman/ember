@@ -1,5 +1,5 @@
 from ember.nn.module import Module, Parameter
-import ember
+from ember.scalar import Scalar
 import random
 
 
@@ -16,17 +16,15 @@ class Linear(Module):
             for j in range(out_size):
                 self.weights[i].append(
                     self.add_parameter(
-                        f"weight_{i}_{j}", ember.Scalar(2 * (random.random() - 0.5))
+                        f"weight_{i}_{j}", Scalar(2 * (random.random() - 0.5))
                     )
                 )
         for j in range(out_size):
             self.bias.append(
-                self.add_parameter(
-                    f"bias_{j}", ember.Scalar(2 * (random.random() - 0.5))
-                )
+                self.add_parameter(f"bias_{j}", Scalar(2 * (random.random() - 0.5)))
             )
 
-    def forward(self, inputs: list[Parameter]) -> list[Parameter]:
+    def forward(self, inputs: list[Scalar]) -> list[Scalar]:
         """
         Forward pass for a linear layer.
 
