@@ -1,20 +1,52 @@
 #pragma once
 #include <vector>
-#include <stdexcept>
-#include <numeric>
-#include <algorithm>
 #include <string>
+#include <stdexcept>
+#include <tuple>
 #include <random>
 
+// -------------------------------
+// Exception
+// -------------------------------
 class IndexingError : public std::runtime_error {
 public:
     using std::runtime_error::runtime_error;
 };
 
+// -------------------------------
+// Helper functions (not methods)
+// -------------------------------
+
+// Converts a multidimensional index into a single storage position
+int index_to_position(const std::vector<int>& index,
+                      const std::vector<int>& strides);
+
+// Converts an ordinal to an index (fills out_index in-place)
+void to_index(int ordinal,
+              const std::vector<int>& shape,
+              std::vector<int>& out_index);
+
+// Broadcasts a big_index down to out_index following broadcasting rules
+void broadcast_index(const std::vector<int>& big_index,
+                     const std::vector<int>& big_shape,
+                     const std::vector<int>& shape,
+                     std::vector<int>& out_index);
+
+// Pure helper version of shape_broadcast
+std::vector<int> shape_broadcast(const std::vector<int>& shape1,
+                                 const std::vector<int>& shape2);
+
+// Pure helper version of strides_from_shape
+std::vector<int> strides_from_shape(const std::vector<int>& shape);
+
+
+// -------------------------------
+// TensorData class
+// -------------------------------
 class TensorData {
 public:
     using Storage = std::vector<float>;
-    using Shape = std::vector<int>;
+    using Shape   = std::vector<int>;
     using Strides = std::vector<int>;
 
 private:
@@ -26,33 +58,23 @@ private:
 
 public:
     // Constructor
-    TensorData(const Storage &storage, const Shape &shape, const Strides &strides = {});
+    TensorData(const Storage &storage,
+               const Shape &shape,
+               const Strides &strides = {});
 
     // -------------------------------
-    // Element access
+    // Instance methods
     // -------------------------------
-    float get(const std::vector<int>& index) const;
-    void set(const std::vector<int>& index, float value);
+    int index(const std::vector<int>& key) const;
+    std::vector<std::vector<int>> indices() const;
+    std::vector<int> sample() const;
 
-    // -------------------------------
-    // Index conversions
-    // -------------------------------
-    int index_to_position(const std::vector<int>& index) const;
-    std::vector<int> to_index(int ordinal) const;
+    float get(const std::vector<int>& key) const;
+    void set(const std::vector<int>& key, float value);
 
-    // -------------------------------
-    // Utilities
-    // -------------------------------
-    bool is_contiguous() const;                          // check memory layout
     TensorData permute(const std::vector<int>& order) const;
-    std::string to_string() const;                       // pretty-print
 
-    // -------------------------------
-    // Index helpers
-    // -------------------------------
-    int index(const std::vector<int>& index) const;      // validate + convert to position
-    std::vector<std::vector<int>> indices() const;       // iterate all indices
-    std::vector<int> sample() const;                     // random index
+    bool is_contiguous() const;
 
     // -------------------------------
     // Properties
@@ -62,11 +84,16 @@ public:
     const Storage& storage() const { return storage_; }
     int size() const { return size_; }
 
-    std::tuple<Storage, Shape, Strides> tuple() const;   // return storage, shape, strides
+    std::tuple<Storage, Shape, Strides> tuple() const {
+        return std::make_tuple(storage_, shape_, strides_);
+    }
+
 
     // -------------------------------
-    // Static utilities
+    // Static methods
     // -------------------------------
-    static Strides strides_from_shape(const Shape& shape);
-    static Shape shape_broadcast(const Shape& shape1, const Shape& shape2);
+    static TensorData::Shape shape_broadcast(const TensorData::Shape& shape1,
+                                         const TensorData::Shape& shape2) {
+    return shape_broadcast(shape1, shape2);
+}
 };
