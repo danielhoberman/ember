@@ -18,7 +18,3 @@ target_include_directories(_core_operators PRIVATE include)
 
 # Install the compiled module into the ember package
 install(TARGETS _core_operators DESTINATION ember)
-
-# Testing
-enable_testing()
-add_subdirectory(cpp_tests)

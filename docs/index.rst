@@ -1,0 +1,17 @@
+.. Ember documentation master file
+
+Welcome to Ember
+================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   modules
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
