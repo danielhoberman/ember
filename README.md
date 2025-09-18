@@ -52,9 +52,13 @@ uv pip install -e .
 
 ---
 
+Perfect 👍 Here’s the updated **README** section with a troubleshooting note about cleaning old build artifacts (to prevent segfaults when switching compilers or branches):
+
+---
+
 ## 🔹 Running Tests
 
-Ember has **Python unit tests** (via `pytest`) and **C++ unit tests** (via GoogleTest, vendored into `extern/googletest`).
+Ember includes both **Python unit tests** (via `pytest`) and **C++ unit tests** (via GoogleTest). You can run them separately or all together.
 
 ### ✅ Python Tests
 
@@ -64,23 +68,55 @@ uv run pytest
 
 ### ✅ C++ Tests
 
-First build the project so test executables are available:
+Make sure you’ve installed in editable mode first:
 
 ```bash
-uv build
+uv pip install -e .
 ```
 
-Then run C++ tests with `ctest`:
+Then run the C++ unit test binary:
 
 ```bash
-uv run ./cpp_tests/build/unit_tests
+./cpp_tests/build/unit_tests
 ```
 
-Or run the test binary directly:
+You can pass GoogleTest flags, for example:
 
 ```bash
-./build/cpp_tests/unit_tests --gtest_list_tests
-./build/cpp_tests/unit_tests --gtest_filter=TensorDataTest.*
+./cpp_tests/build/unit_tests --gtest_list_tests
+./cpp_tests/build/unit_tests --gtest_filter=HelperFunctionsTest.*
+```
+
+### ✅ Run Everything via Makefile
+
+The project includes a simple `Makefile` to run tests consistently:
+
+```makefile
+.PHONY: test-all cpp-tests py-tests install-dev
+
+install-dev:
+	uv pip install -e .
+
+cpp-tests:
+	./cpp_tests/build/unit_tests
+
+py-tests:
+	uv run pytest
+
+test-all: install-dev py-tests cpp-tests
+```
+
+Run **all tests** (C++ + Python) with:
+
+```bash
+make test-all
+```
+
+Or run them individually:
+
+```bash
+make py-tests
+make cpp-tests
 ```
 
 ---
