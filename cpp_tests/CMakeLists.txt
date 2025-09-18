@@ -1,10 +1,10 @@
-# Create test executable
-add_executable(test_tensor
-    test_tensor_data.cpp
+add_executable(unit_tests test_tensor_data.cpp)
+
+target_link_libraries(unit_tests
+    PRIVATE
+        ember
+        gtest_main
 )
 
-# Link with the main library
-target_link_libraries(test_tensor PRIVATE ember)
-
-# Register tests with CTest
-add_test(NAME TensorTests COMMAND test_tensor)
+include(GoogleTest)
+gtest_discover_tests(unit_tests)

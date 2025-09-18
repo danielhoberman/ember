@@ -1,20 +1,27 @@
 cmake_minimum_required(VERSION 3.18)
 project(ember LANGUAGES CXX)
 
-# Use C++17
+# === Global C++ settings ===
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find pybind11
+# === pybind11 extension ===
 find_package(pybind11 CONFIG REQUIRED)
 
-# Build the pybind11 extension _core_operators
 pybind11_add_module(_core_operators
     src/operators_bindings.cpp   # only this file, operators.h is included header-only
 )
-
-# Include the folder containing operators.h
 target_include_directories(_core_operators PRIVATE include)
 
-# Install the compiled module into the ember package
 install(TARGETS _core_operators DESTINATION ember)
+
+# === Ember C++ library (non-Python parts) ===
+add_library(ember
+    src/tensor/tensor_data.cpp
+)
+target_include_directories(ember PUBLIC include)
+
+# === GoogleTest + Unit Tests ===
+enable_testing()
+add_subdirectory(extern/googletest)  # vendored gtest
+add_subdirectory(cpp_tests)          # your test folder

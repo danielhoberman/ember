@@ -94,6 +94,6 @@ public:
     // -------------------------------
     static TensorData::Shape shape_broadcast(const TensorData::Shape& shape1,
                                          const TensorData::Shape& shape2) {
-    return shape_broadcast(shape1, shape2);
-}
+    return ::shape_broadcast(shape1, shape2);
+    }
 };
