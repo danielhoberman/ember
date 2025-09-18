@@ -73,7 +73,7 @@ uv build
 Then run C++ tests with `ctest`:
 
 ```bash
-uv run ./cpp_tests/build/unit_tests --gtest_output=xml
+uv run ./cpp_tests/build/unit_tests
 ```
 
 Or run the test binary directly:

@@ -19,16 +19,12 @@ repos:
     hooks:
       - id: python-tests
         name: Python unit tests
-        entry: uv run pytest --ignore=extern
+        entry: uv run pytest
         language: system
         types: [python]
-        always_run: true
-        stages: [post-commit]
 
       - id: cpp-tests
         name: C++ unit tests
-        entry: ./cpp_tests/build/unit_tests --gtest_output=xml
+        entry: uv run ./cpp_tests/build/unit_tests
         language: system
         types: [c]
-        always_run: true
-        stages: [post-commit]
