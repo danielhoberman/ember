@@ -25,3 +25,8 @@ target_include_directories(ember PUBLIC include)
 enable_testing()
 add_subdirectory(extern/googletest)  # vendored gtest
 add_subdirectory(cpp_tests)          # your test folder
+
+add_custom_target(copy_tests ALL
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unit_tests> ${CMAKE_SOURCE_DIR}/cpp_tests/build/unit_tests
+    DEPENDS unit_tests
+)

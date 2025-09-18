@@ -25,6 +25,6 @@ repos:
 
       - id: cpp-tests
         name: C++ unit tests
-        entry: uv run ctest --test-dir build --output-on-failure
+        entry: uv run ./cpp_tests/build/unit_tests --gtest_output=xml
         language: system
         types: [c]
