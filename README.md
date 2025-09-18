@@ -38,7 +38,7 @@ cd ember
 uv build
 ```
 
-- This will create a `_core` module inside `dist/` that Python can import.
+- This will compile the `_core_operators` module and place it in `dist/`.
 
 ---
 
@@ -49,6 +49,66 @@ uv pip install -e .
 ```
 
 - Python will recognize the `ember` package for development.
+
+---
+
+## 🔹 Running Tests
+
+Ember has **Python unit tests** (via `pytest`) and **C++ unit tests** (via GoogleTest, vendored into `extern/googletest`).
+
+### ✅ Python Tests
+
+```bash
+uv run pytest
+```
+
+### ✅ C++ Tests
+
+First build the project so test executables are available:
+
+```bash
+uv build
+```
+
+Then run C++ tests with `ctest`:
+
+```bash
+uv run ctest --test-dir build --output-on-failure
+```
+
+Or run the test binary directly:
+
+```bash
+./build/cpp_tests/unit_tests --gtest_list_tests
+./build/cpp_tests/unit_tests --gtest_filter=TensorDataTest.*
+```
+
+---
+
+## 🔹 Pre-commit Hooks
+
+This repo uses [pre-commit](https://pre-commit.com/) to ensure **linting, type-checking, and tests all pass before committing**.
+
+Install hooks:
+
+```bash
+uv run pre-commit install
+```
+
+Run all hooks manually:
+
+```bash
+uv run pre-commit run --all-files
+```
+
+Hooks include:
+
+- **Ruff** (linting & formatting)
+- **Mypy** (static type checking)
+- **Pytest** (Python unit tests)
+- **CTest** (C++ unit tests)
+
+If any check fails, the commit will be blocked.
 
 ---
 
@@ -71,18 +131,6 @@ from ember import ScalarTrain
 trainer = ScalarTrain(hidden_layers=10)
 data = ember.datasets
 trainer.train(data, learning_rate=0.5)
-```
-
----
-
-## 🔹 Development
-
-- Use `uv` to manage builds and package installation.
-- Use `pre-commit` with `ruff` and `mypy` for linting and type checking:
-
-```bash
-uv run pre-commit install
-uv run pre-commit run --all-files
 ```
 
 ---

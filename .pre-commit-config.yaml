@@ -14,3 +14,17 @@ repos:
     hooks:
       - id: mypy
         exclude: ^(docs/)|(project/)|(assignments/)|(project/interface/)
+
+  - repo: local
+    hooks:
+      - id: python-tests
+        name: Python unit tests
+        entry: uv run pytest
+        language: system
+        types: [python]
+
+      - id: cpp-tests
+        name: C++ unit tests
+        entry: uv run ctest --test-dir build --output-on-failure
+        language: system
+        types: [c]
